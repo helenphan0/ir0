@@ -1,4 +1,20 @@
-# Getting Started with Create React App
+# Project IR0
+
+This app is an interface that allows you to manage your firebase data directly.
+
+## Setup
+You must be on Node v10+.
+1. `git clone https://github.com/helenphan0/ir0.git`
+2. `cd ir0`
+3. `yarn install`
+4. `yarn start`
+
+## Configs
+This project will run in port `3000` by default. You can define a different port on your `.env` with `PORT=3001`.
+
+You will need a firebase service account key saved at the root directory under `serviceAccountKey.json`.
+
+## CRA
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
