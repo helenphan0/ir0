@@ -1,17 +1,36 @@
-import React from 'react';
-import 'antd/dist/antd.css';
-import './App.scss';
+import React, { useEffect, useState } from "react";
+import "antd/dist/antd.css";
+import "./App.scss";
 
-import Dashboard from './Dashboard/Dashboard';
+import { FirestoreContext } from "Contexts";
+import FB from "firebaseApi";
+
+import Dashboard from "./dashboard/Dashboard";
+import LoginForm from "./login/LoginForm";
 
 function App() {
+  const [fs, setFs] = useState();
+
+  useEffect(() => {
+    const { firestore } = FB.getDb();
+
+    setFs(firestore);
+  }, [fs]);
+
+  const loadFs = (fs: any) => {
+    setFs(fs);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>IR-0</h1>
-      </header>
-      <Dashboard />
-    </div>
+    <FirestoreContext.Provider value={{ fs }}>
+      <div className="App">
+        <header className="App-header">
+          <h1>IR-0</h1>
+        </header>
+        {!fs && <LoginForm loadFs={loadFs} />}
+        {fs && <Dashboard />}
+      </div>
+    </FirestoreContext.Provider>
   );
 }
 
