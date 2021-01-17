@@ -9,10 +9,6 @@
 # production
 /build
 
-# private
-/src/firebaseSchemas/*[!index]*.ts
-serviceAccountKey.json
-
 # local
 /config/local.json
 /.vscode/*
