@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import FB from "firebaseApi";
 import { IData, IDataQuery, ISelectOptions } from "models/common";
+import CollectionData from "../collectionData";
 
 const collections = FB.firestoreSchema as any;
 
@@ -131,36 +132,13 @@ const GetCard = styled(({ ...props }) => {
           </Form.Item>
         </Form>
       </div>
-      <section className="collection-results">
-        <p>
-          {dataQuery.collectionKey}
-          {dataQuery.collectionKey ? "/" : ""}
-          {dataQuery.collectionValue}
-          {dataQuery.subCollectionKey ? "/" : ""}
-          {dataQuery.subCollectionKey}
-          {dataQuery.subCollectionKey ? "/" : ""}
-          {dataQuery.subCollectionValue}
-        </p>
-        <pre className="code-block">
-          {collectionData && JSON.stringify(collectionData, null, 2)}
-        </pre>
-      </section>
+      <CollectionData dataQuery={dataQuery} collectionData={collectionData}/>
     </Card>
   );
 })`
   .collection-key-value {
     display: inline-flex;
     width: 23rem;
-  }
-
-  .collection-results {
-    margin: 1rem 0;
-    padding: 1rem;
-    background-color: rgba(250, 250, 250);
-  }
-
-  .code-block {
-    white-space: pre-wrap;
   }
 `;
 

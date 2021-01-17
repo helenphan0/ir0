@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Card } from "antd";
 
-import GetCard from "./getCard/GetCard";
+import GetCard from "./getCard";
 
 const Dashboard = styled((props) => {
   return (
