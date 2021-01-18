@@ -12,7 +12,16 @@ You must be on Node v10+.
 ## Configs
 This project will run in port `3000` by default. You can define a different port on your `.env` with `PORT=3001`.
 
-You will need a firebase service account key saved at the root directory under `serviceAccountKey.json`.
+You will need the following firebase config variables. In CRA, env variables used in the client scripts need be prefixed with `REACT_APP_` (eg. `REACT_APP_FIREBASE_API_KEY`).
+```
+FIREBASE_API_KEY
+FIREBASE_AUTH_DOMAIN
+FIREBASE_DATABASE_URL
+FIREBASE_PROJECT_ID
+FIREBASE_STORAGE_BUCKET
+FIREBASE_MESSAGING_SENDER_ID
+FIREBASE_APP_ID
+```
 
 ## CRA
 

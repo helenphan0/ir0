@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import "antd/dist/antd.css";
 import "./App.scss";
 
-import { FirestoreContext } from "Contexts";
+import { DataContext, FirestoreContext } from "Contexts";
 import FB from "firebaseApi";
 
 import Dashboard from "./dashboard/Dashboard";
 import LoginForm from "./login/LoginForm";
+import DataApi from "./dataApi/dataApi";
 
 function App() {
   const [fs, setFs] = useState();
@@ -17,19 +18,23 @@ function App() {
     setFs(firestore);
   }, [fs]);
 
+  const dataApi = new DataApi();
+
   const loadFs = (fs: any) => {
     setFs(fs);
   };
 
   return (
     <FirestoreContext.Provider value={{ fs }}>
-      <div className="App">
-        <header className="App-header">
-          <h1>IR-0</h1>
-        </header>
-        {!fs && <LoginForm loadFs={loadFs} />}
-        {fs && <Dashboard />}
-      </div>
+      <DataContext.Provider value={{ dataApi }}>
+        <div className="App">
+          <header className="App-header">
+            <h1>IR-0</h1>
+          </header>
+          {!fs && <LoginForm loadFs={loadFs} />}
+          {fs && <Dashboard />}
+        </div>
+      </DataContext.Provider>
     </FirestoreContext.Provider>
   );
 }

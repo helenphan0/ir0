@@ -1,14 +1,15 @@
 import { useMemo, useState } from "react";
 import { Button, Card, Form, Input, Select, message } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 
 import FB from "firebaseApi";
+import CollectionData from "collectionData/CollectionData";
 import { IData, IDataQuery, ISelectOptions } from "models/common";
-import CollectionData from "../collectionData";
 
 const collections = FB.firestoreSchema as any;
 
-const GetCard = styled(({ ...props }) => {
+const GetCard = styled(({  ...props }) => {
   const [form] = Form.useForm();
   const [dataQuery, setDataQuery] = useState<IDataQuery>({} as any);
   const [collectionData, setCollectionData] = useState<IData | null>();
@@ -74,7 +75,7 @@ const GetCard = styled(({ ...props }) => {
   };
 
   return (
-    <Card title="GET" className="dashboard-card" {...props}>
+    <Card className="dashboard-card" bordered={false} {...props}>
       <div>
         <Form
           className="dataquery-form"
@@ -93,7 +94,8 @@ const GetCard = styled(({ ...props }) => {
             rules={[{ required: true, message: "Select a colection" }]}
           >
             <Select
-              allowClear={true}
+              // allowClear={true}
+              showArrow={false}
               style={{ minWidth: "10rem" }}
               options={collectionOptions}
             />
@@ -112,6 +114,7 @@ const GetCard = styled(({ ...props }) => {
             <Form.Item name="subCollectionKey" dependencies={["collectionKey"]}>
               <Select
                 allowClear={true}
+                showArrow={false}
                 style={{ minWidth: "10rem" }}
                 options={subCollectionOptions}
               />
@@ -126,9 +129,7 @@ const GetCard = styled(({ ...props }) => {
             </Form.Item>
           )}
           <Form.Item>
-            <Button type="primary" onClick={getData}>
-              GET
-            </Button>
+            <Button type="primary" icon={<SearchOutlined/>} onClick={getData} />
           </Form.Item>
         </Form>
       </div>

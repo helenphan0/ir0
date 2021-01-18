@@ -8,3 +8,9 @@ export interface IDataQuery {
   subCollectionKey?: string;
   subCollectionValue?: string;
 }
+
+export enum DATA_ACTIONS {
+  GET = "GET",
+  ADD = "ADD",
+  UPDATE = "UPDATE",
+}
