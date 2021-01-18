@@ -1,13 +1,21 @@
 import styled from "styled-components";
-import { Card } from "antd";
+import { Card, Collapse } from "antd";
 
-import GetCard from "./getCard";
+import GetCard from "../getCard/GetCard";
+import UpdateCard from "../updateCard/UpdateCard";
 
 const Dashboard = styled((props) => {
   return (
     <div {...props}>
       <Card className="dashboard-container">
-        <GetCard />
+        <Collapse expandIconPosition="right" defaultActiveKey={["1"]}>
+          <Collapse.Panel header="GET" key="1">
+            <GetCard />
+          </Collapse.Panel>
+          <Collapse.Panel header="UPDATE" key="2">
+            <UpdateCard />
+          </Collapse.Panel>
+        </Collapse>
       </Card>
     </div>
   );
