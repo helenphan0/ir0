@@ -1,6 +1,7 @@
 import firebase from "firebase";
 import "firebase/firestore";
-import { all, collection, get, upset, Doc } from "typesaurus";
+import { all, collection, get, upset, update, Doc } from "typesaurus";
+import { inc } from "semver";
 
 import { IData, IDataQuery } from "models/common";
 
@@ -68,7 +69,7 @@ export const getCollectionData = async (
 
     return subDoc;
   } catch (err) {
-    console.log('Error on GET collection', err);
+    console.log("Error on GET collection", err);
     throw new Error(
       `Could not find document: ${collectionValue} in collection: ${collectionKey}`
     );
@@ -98,7 +99,7 @@ export const getSubCollectionData = async ({
     const subDoc = await get(subCollectionRef, subCollectionValue);
     return subDoc && subDoc.data;
   } catch (err) {
-    console.log('Error on GET subcollection', err);
+    console.log("Error on GET subcollection", err);
     throw new Error(
       `Could not find document: ${subCollectionValue} in subcollection: ${subCollectionKey}`
     );
@@ -111,11 +112,16 @@ export const setCollectionData = async (
   const {
     collectionKey,
     collectionValue,
+    subCollectionKey,
     subCollectionValue,
     updateValue,
   } = dataQuery;
 
   if (!collectionKey || !collectionValue || !updateValue) return null;
+
+  if (collectionKey === "verses" && subCollectionKey === "assets") {
+    await updateVerseVersion(collectionValue);
+  }
 
   const path = getCollectionPath(dataQuery);
   const collectionRef = collection(path);
@@ -124,13 +130,11 @@ export const setCollectionData = async (
   try {
     await upset<IData | undefined>(collectionRef, updateId, updateValue);
     const result = await get<IData | null>(collectionRef, updateId);
-  
+
     return result && result.data;
   } catch (err) {
-    console.log('Error on Update collection', err);
-    throw new Error(
-      `Could not update document: ${updateId} in collection`
-    );
+    console.log("Error on Update collection", err);
+    throw new Error(`Could not update document: ${updateId} in collection`);
   }
 };
 
@@ -143,4 +147,23 @@ function getCollectionPath(dataQuery: IDataQuery): string {
   }
 
   return `${path}/${collectionValue}/${subCollectionKey}`;
+}
+
+async function updateVerseVersion(verseId: string): Promise<void> {
+  try {
+    const verseRef = collection<IData>("verses");
+    const result = await get<IData | null>(verseRef, verseId);
+
+    if (!result || !result.data) return;
+
+    const verse = result.data;
+    if (!verse.version) return;
+
+    const version = inc(verse.version, "patch");
+    await update<IData | undefined>(verseRef, verseId, {
+      version: version,
+    } as any);
+  } catch (e) {
+    console.log(`Failed to update verse ${verseId} version`);
+  }
 }
