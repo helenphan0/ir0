@@ -1,9 +1,11 @@
+import { ChangeEvent, useContext, useMemo, useState } from "react";
 import styled from "styled-components";
 import { Button, Input, Tooltip, message } from "antd";
 import { CopyTwoTone, EditTwoTone } from "@ant-design/icons";
 
+import { DataContext } from "Contexts";
+import DataApi from "dataApi/dataApi";
 import { IDataQuery } from "models/common";
-import { ChangeEvent, useMemo, useRef, useState } from "react";
 
 const CollectionData = styled(
   ({
@@ -16,11 +18,11 @@ const CollectionData = styled(
     collectionData?: any;
     editable?: boolean;
   }): JSX.Element => {
-    const [textarea, setTextArea] = useState('');
+    const [textarea, setTextArea] = useState("");
+    const { dataApi } = useContext(DataContext) as { dataApi: DataApi };
 
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
-    const data = useMemo(
-      () => (collectionData ? JSON.stringify(collectionData, null, 2) : ''),
+    const dataString = useMemo(
+      () => (collectionData ? JSON.stringify(collectionData, null, 2) : ""),
       [collectionData]
     );
 
@@ -28,13 +30,16 @@ const CollectionData = styled(
       target: { value },
     }: ChangeEvent<HTMLTextAreaElement>): void => {
       setTextArea(value);
+      dataApi.updateSaveData(value);
     };
 
     const copy = (): void => {
-      if (!data) return;
+      if (!dataString) return;
 
+      dataApi.copy(collectionData);
+  
       const el = document.createElement("textarea");
-      el.value = data;
+      el.value = dataString;
       el.setAttribute("readonly", "");
       el.style.position = "absolute";
       el.style.left = "-9999px";
@@ -56,16 +61,15 @@ const CollectionData = styled(
     };
 
     const paste = () => {
-      if (!textareaRef.current) return;
-
-      textareaRef.current.focus();
-      document.execCommand('paste');
+      setTextArea(dataApi.clipboard);
+      dataApi.updateSaveData(dataApi.clipboard);
     };
 
-    const onPaste = (ev: React.ClipboardEvent) => {
-      const data = ev.clipboardData.getData('text');
+    const onManualPaste = (ev: React.ClipboardEvent) => {
+      const data = ev.clipboardData.getData("text");
       setTextArea(data);
-    }
+      dataApi.updateSaveData(data);
+    };
 
     return (
       <section className="collection-data" {...props}>
@@ -79,7 +83,7 @@ const CollectionData = styled(
             {dataQuery.subCollectionKey ? "/" : ""}
             {dataQuery.subCollectionValue}
           </p>
-          {!editable && data && (
+          {!editable && dataString && (
             <Tooltip title="copy">
               <Button type="text" icon={<CopyTwoTone />} onClick={copy} />
             </Tooltip>
@@ -95,11 +99,10 @@ const CollectionData = styled(
             rows={10}
             value={textarea}
             onChange={onChangeTextarea}
-            onPaste={onPaste}
-            ref={textareaRef}
+            onPaste={onManualPaste}
           />
         ) : (
-          <pre className="code-block">{data}</pre>
+          <pre className="code-block">{dataString}</pre>
         )}
       </section>
     );

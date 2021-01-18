@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Button, Card, Form, Input, Select, message } from "antd";
+import { Button, Card, Form, Input, Select, Tooltip, message } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 
@@ -9,7 +9,7 @@ import { IData, IDataQuery, ISelectOptions } from "models/common";
 
 const collections = FB.firestoreSchema as any;
 
-const GetCard = styled(({  ...props }) => {
+const GetCard = styled(({ ...props }) => {
   const [form] = Form.useForm();
   const [dataQuery, setDataQuery] = useState<IDataQuery>({} as any);
   const [collectionData, setCollectionData] = useState<IData | null>();
@@ -43,7 +43,7 @@ const GetCard = styled(({  ...props }) => {
     try {
       const values = await form.validateFields();
       const { collectionKey } = dataQuery;
-  
+
       if (collectionKey) {
         try {
           const data = await FB.getCollectionData(values);
@@ -129,11 +129,18 @@ const GetCard = styled(({  ...props }) => {
             </Form.Item>
           )}
           <Form.Item>
-            <Button type="primary" icon={<SearchOutlined/>} onClick={getData} />
+            <Tooltip title="get">
+              <Button
+                type="primary"
+                icon={<SearchOutlined />}
+                onClick={getData}
+                disabled={!dataQuery.collectionKey || !dataQuery.collectionValue}
+              />
+            </Tooltip>
           </Form.Item>
         </Form>
       </div>
-      <CollectionData dataQuery={dataQuery} collectionData={collectionData}/>
+      <CollectionData dataQuery={dataQuery} collectionData={collectionData} />
     </Card>
   );
 })`

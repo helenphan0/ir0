@@ -1,6 +1,6 @@
 import firebase from "firebase";
 import "firebase/firestore";
-import { all, collection, get, Doc } from "typesaurus";
+import { all, collection, get, upset, Doc } from "typesaurus";
 
 import { IData, IDataQuery } from "models/common";
 
@@ -52,13 +52,11 @@ export const initializeFirebase = async ({
   return db;
 };
 
-export const getCollectionData = async (dataQuery: IDataQuery) => {
-  const {
-    collectionKey,
-    collectionValue,
-    subCollectionKey,
-  } = dataQuery;
-  if (!collectionKey || !collectionValue) return;
+export const getCollectionData = async (
+  dataQuery: IDataQuery
+): Promise<IData | null> => {
+  const { collectionKey, collectionValue, subCollectionKey } = dataQuery;
+  if (!collectionKey || !collectionValue) return null;
 
   try {
     const collectionRef = collection<IData>(collectionKey);
@@ -70,6 +68,7 @@ export const getCollectionData = async (dataQuery: IDataQuery) => {
 
     return subDoc;
   } catch (err) {
+    console.log('Error on GET collection', err);
     throw new Error(
       `Could not find document: ${collectionValue} in collection: ${collectionKey}`
     );
@@ -81,8 +80,8 @@ export const getSubCollectionData = async ({
   collectionValue,
   subCollectionKey,
   subCollectionValue,
-}: IDataQuery) => {
-  if (!collection || !subCollectionKey) return;
+}: IDataQuery): Promise<IData | null> => {
+  if (!collection || !subCollectionKey) return null;
 
   try {
     const subCollectionRef = collection<IData>(
@@ -99,8 +98,49 @@ export const getSubCollectionData = async ({
     const subDoc = await get(subCollectionRef, subCollectionValue);
     return subDoc && subDoc.data;
   } catch (err) {
+    console.log('Error on GET subcollection', err);
     throw new Error(
       `Could not find document: ${subCollectionValue} in subcollection: ${subCollectionKey}`
     );
   }
 };
+
+export const setCollectionData = async (
+  dataQuery: IDataQuery
+): Promise<IData | null> => {
+  const {
+    collectionKey,
+    collectionValue,
+    subCollectionValue,
+    updateValue,
+  } = dataQuery;
+
+  if (!collectionKey || !collectionValue || !updateValue) return null;
+
+  const path = getCollectionPath(dataQuery);
+  const collectionRef = collection(path);
+  const updateId = subCollectionValue || collectionValue;
+
+  try {
+    await upset<IData | undefined>(collectionRef, updateId, updateValue);
+    const result = await get<IData | null>(collectionRef, updateId);
+  
+    return result && result.data;
+  } catch (err) {
+    console.log('Error on Update collection', err);
+    throw new Error(
+      `Could not update document: ${updateId} in collection`
+    );
+  }
+};
+
+function getCollectionPath(dataQuery: IDataQuery): string {
+  const { collectionKey, collectionValue, subCollectionKey } = dataQuery;
+
+  let path = collectionKey;
+  if (!subCollectionKey) {
+    return path;
+  }
+
+  return `${path}/${collectionValue}/${subCollectionKey}`;
+}
