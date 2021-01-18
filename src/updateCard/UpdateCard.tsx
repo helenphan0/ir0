@@ -1,11 +1,13 @@
-import { useMemo, useState } from "react";
-import { Button, Card, Form, Input, Select, message } from "antd";
+import { useContext, useMemo, useState } from "react";
+import { Button, Card, Form, Input, Select, Tooltip, message } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 
+import { DataContext } from "Contexts";
+import DataApi from "dataApi/dataApi";
 import FB from "firebaseApi";
 import CollectionData from "collectionData/CollectionData";
-import { IData, IDataQuery, ISelectOptions } from "models/common";
+import { IDataQuery, ISelectOptions } from "models/common";
 
 const collections = FB.firestoreSchema as any;
 
@@ -13,7 +15,7 @@ const UpdateCard = styled(
   ({ ...props }): JSX.Element => {
     const [form] = Form.useForm();
     const [dataQuery, setDataQuery] = useState<IDataQuery>({} as any);
-    const [collectionData, setCollectionData] = useState<IData | null>();
+    const { dataApi } = useContext(DataContext) as { dataApi: DataApi };
 
     const collectionOptions = Object.keys(collections).reduce(
       (options: ISelectOptions[], collectionKey: string) => {
@@ -39,16 +41,16 @@ const UpdateCard = styled(
       );
 
     const setData = async () => {
-      setCollectionData(null);
-
       try {
         const values = await form.validateFields();
         const { collectionKey } = dataQuery;
 
         if (collectionKey) {
           try {
-            const data = await FB.getCollectionData(values);
-            setCollectionData(data || { message: "No results found" });
+            const updateValue = dataApi.getSaveData();
+            await FB.setCollectionData({ ...values, updateValue });
+
+            message.success("Updated successfully!");
           } catch (err) {
             message.error(err.message);
           }
@@ -135,11 +137,14 @@ const UpdateCard = styled(
               </Form.Item>
             )}
             <Form.Item>
-              <Button
-                type="primary"
-                icon={<SaveOutlined />}
-                onClick={setData}
-              />
+              <Tooltip title="save">
+                <Button
+                  type="primary"
+                  icon={<SaveOutlined />}
+                  onClick={setData}
+                  disabled={!dataQuery.collectionKey || !dataQuery.collectionValue}
+                />
+              </Tooltip>
             </Form.Item>
           </Form>
         </div>

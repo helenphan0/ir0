@@ -7,6 +7,7 @@ export interface IDataQuery {
   collectionValue: string;
   subCollectionKey?: string;
   subCollectionValue?: string;
+  updateValue?: IData;
 }
 
 export enum DATA_ACTIONS {
