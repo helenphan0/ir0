@@ -5,8 +5,8 @@ import "./App.scss";
 import { DataContext, FirestoreContext } from "./Contexts";
 import FB from "./firebaseApi";
 import DataApi from "./dataApi/dataApi";
-import Dashboard from "./dashboard/Dashboard";
 import LoginForm from "./login/LoginForm";
+import { Dashboard } from "./Dashboard";
 
 function App() {
   const [fs, setFs] = useState();
