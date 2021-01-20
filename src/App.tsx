@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import "antd/dist/antd.css";
 import "./App.scss";
 
-import { DataContext, FirestoreContext } from "Contexts";
-import FB from "firebaseApi";
-
+import { DataContext, FirestoreContext } from "./Contexts";
+import FB from "./firebaseApi";
+import DataApi from "./dataApi/dataApi";
 import Dashboard from "./dashboard/Dashboard";
 import LoginForm from "./login/LoginForm";
-import DataApi from "./dataApi/dataApi";
 
 function App() {
   const [fs, setFs] = useState();

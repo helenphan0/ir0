@@ -3,9 +3,9 @@ import { Button, Card, Form, Input, Select, Tooltip, message } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 
-import FB from "firebaseApi";
-import CollectionData from "collectionData/CollectionData";
-import { IData, IDataQuery, ISelectOptions } from "models/common";
+import FB from "../firebaseApi";
+import CollectionData from "../collectionData/CollectionData";
+import { IData, IDataQuery, ISelectOptions } from "../models/common";
 
 const collections = FB.firestoreSchema as any;
 

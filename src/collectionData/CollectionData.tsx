@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { Button, Input, Tooltip, message } from "antd";
 import { CopyTwoTone, EditTwoTone } from "@ant-design/icons";
 
-import { DataContext } from "Contexts";
-import DataApi from "dataApi/dataApi";
-import { IDataQuery } from "models/common";
+import { DataContext } from "../Contexts";
+import DataApi from "../dataApi/dataApi";
+import { IDataQuery } from "../models/common";
 
 const CollectionData = styled(
   ({

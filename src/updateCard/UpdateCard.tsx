@@ -3,11 +3,11 @@ import { Button, Card, Form, Input, Select, Tooltip, message } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 
-import { DataContext } from "Contexts";
-import DataApi from "dataApi/dataApi";
-import FB from "firebaseApi";
-import CollectionData from "collectionData/CollectionData";
-import { IDataQuery, ISelectOptions } from "models/common";
+import { DataContext } from "../Contexts";
+import DataApi from "../dataApi/dataApi";
+import FB from "../firebaseApi";
+import CollectionData from "../collectionData/CollectionData";
+import { IDataQuery, ISelectOptions } from "../models/common";
 
 const collections = FB.firestoreSchema as any;
 

@@ -3,7 +3,7 @@ import "firebase/firestore";
 import { all, collection, get, upset, update, Doc } from "typesaurus";
 import { inc } from "semver";
 
-import { IData, IDataQuery } from "models/common";
+import { IData, IDataQuery } from "../../models/common";
 
 const config = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
