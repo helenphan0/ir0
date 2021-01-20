@@ -1,4 +1,4 @@
-import { IData } from "models/common";
+import { IData } from "../models/common";
 
 class DataApi {
   clipboard: string = "";

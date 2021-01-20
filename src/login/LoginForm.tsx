@@ -1,6 +1,6 @@
 import { Button, Card, Form, Input } from "antd";
 
-import FB from "firebaseApi";
+import FB from "../firebaseApi";
 
 const LoginCard = ({ loadFs }: { loadFs: (fs: any) => void }) => {
   const [form] = Form.useForm();
