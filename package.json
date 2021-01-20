@@ -2,6 +2,9 @@
   "name": "ir0",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "12.20.1"
+  },
   "dependencies": {
     "@ant-design/icons": "^4.3.0",
     "antd": "^4.10.2",
