@@ -4,7 +4,7 @@ import { Card, Collapse } from "antd";
 import GetCard from "../getCard/GetCard";
 import UpdateCard from "../updateCard/UpdateCard";
 
-const Dashboard = styled((props) => {
+export const Dashboard = styled((props) => {
   return (
     <div {...props}>
       <Card className="dashboard-container">
