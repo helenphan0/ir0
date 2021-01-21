@@ -18,7 +18,7 @@ export const isLoggedIn = (): boolean => {
   return !!firebase.auth().currentUser;
 };
 
-export const getDb = () => {
+export const initializeFirebase = () => {
   if (!firebase.apps.length) {
     firebase.initializeApp(config);
   } else {
@@ -31,26 +31,20 @@ export const getDb = () => {
   return { firestore };
 };
 
-export const initializeFirebase = async ({
+export const signIn = async ({
   email,
   password,
 }: {
   email: string;
   password: string;
 }) => {
-  const db = getDb();
+  try {
+    await firebase.auth().signInWithEmailAndPassword(email, password);
 
-  if (!isLoggedIn()) {
-    try {
-      await firebase.auth().signInWithEmailAndPassword(email, password);
-
-      return db;
-    } catch (e) {
-      throw new Error(`${e.code}: ${e.message}`);
-    }
+    return firebase.auth().currentUser;
+  } catch (e) {
+    throw new Error(`${e.code}: ${e.message}`);
   }
-
-  return db;
 };
 
 export const getCollectionData = async (

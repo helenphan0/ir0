@@ -3,19 +3,18 @@ import { Button, Card, Form, Input } from "antd";
 
 import FB from "../firebaseApi";
 
-const LoginCard = ({ loadFs }: { loadFs: (fs: any) => void }) => {
+const LoginCard = () => {
   const [form] = Form.useForm();
 
   const onFinish = async (form: any) => {
-    const { firestore } = await FB.initializeFirebase(form);
-    loadFs(firestore);
+    await FB.signIn(form);
   };
 
   return (
     <Card>
       <Form
         labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
+        wrapperCol={{ span: 8 }}
         form={form}
         onFinish={onFinish}
       >
@@ -33,7 +32,7 @@ const LoginCard = ({ loadFs }: { loadFs: (fs: any) => void }) => {
         >
           <Input.Password />
         </Form.Item>
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        <Form.Item wrapperCol={{ offset: 8, span: 8 }}>
           <Button htmlType="submit" type="primary">
             Submit
           </Button>
