@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { DataContext } from "../Contexts";
 import DataApi from "../dataApi/dataApi";
 import FB from "../firebaseApi";
-import CollectionData from "../collectionData/CollectionData";
+import CollectionDataBox from "../CollectionDataBox/CollectionDataBox";
 import { IDataQuery, ISelectOptions } from "../models/common";
 
 const collections = FB.firestoreSchema as any;
@@ -148,7 +148,7 @@ const UpdateCard = styled(
             </Form.Item>
           </Form>
         </div>
-        <CollectionData editable={true} dataQuery={dataQuery} />
+        <CollectionDataBox editable={true} dataQuery={dataQuery} />
       </Card>
     );
   }

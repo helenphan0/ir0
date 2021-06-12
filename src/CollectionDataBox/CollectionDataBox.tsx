@@ -7,7 +7,7 @@ import { DataContext } from "../Contexts";
 import DataApi from "../dataApi/dataApi";
 import { IDataQuery } from "../models/common";
 
-const CollectionData = styled(
+const CollectionDataBox = styled(
   ({
     dataQuery,
     collectionData,
@@ -45,12 +45,6 @@ const CollectionData = styled(
       dataApi.updateSaveData(dataApi.clipboard);
     };
 
-    const onManualPaste = (ev: React.ClipboardEvent) => {
-      const data = ev.clipboardData.getData("text");
-      setTextArea(data);
-      dataApi.updateSaveData(data);
-    };
-
     return (
       <section className="collection-data" {...props}>
         <div className="collection-data-row">
@@ -79,7 +73,6 @@ const CollectionData = styled(
             rows={10}
             value={textarea}
             onChange={onChangeTextarea}
-            onPaste={onManualPaste}
           />
         ) : (
           <pre className="code-block">{dataString}</pre>
@@ -104,4 +97,4 @@ const CollectionData = styled(
   }
 `;
 
-export default CollectionData;
+export default CollectionDataBox;
