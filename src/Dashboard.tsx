@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { Card, Collapse } from "antd";
 
-import GetCard from "./getCard/GetCard";
-import UpdateCard from "./updateCard/UpdateCard";
+import GetCard from "./Cards/GetCard";
+import UpdateCard from "./Cards/UpdateCard";
 
 export const Dashboard = styled((props) => {
   return (

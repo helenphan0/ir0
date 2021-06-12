@@ -4,7 +4,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 
 import FB from "../firebaseApi";
-import CollectionData from "../collectionData/CollectionData";
+import CollectionDataBox from "../CollectionDataBox/CollectionDataBox";
 import { IData, IDataQuery, ISelectOptions } from "../models/common";
 
 const collections = FB.firestoreSchema as any;
@@ -140,7 +140,7 @@ const GetCard = styled(({ ...props }) => {
           </Form.Item>
         </Form>
       </div>
-      <CollectionData dataQuery={dataQuery} collectionData={collectionData} />
+      <CollectionDataBox dataQuery={dataQuery} collectionData={collectionData} />
     </Card>
   );
 })`
