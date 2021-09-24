@@ -4,7 +4,7 @@ import firebase from "firebase";
 import FB from '../firebaseApi';
 
 export const useAuth = () => {
-  const { firestore } = FB.initializeFirebase();
+  const { firestore, realtime } = FB.initializeFirebase();
 
   const [state, setState] = useState(() => {
     const user = firebase.auth().currentUser;
@@ -24,5 +24,5 @@ export const useAuth = () => {
     return () => unsubscribe();
   }, []);
 
-  return { ...state, firestore };
+  return { ...state, firestore, realtime };
 };

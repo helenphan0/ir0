@@ -6,15 +6,22 @@ enum COLLECTION_KEYS {
 };
 
 export const realtimeDbSchema = {
+  [COLLECTION_KEYS.GAMES]: {
+    key: COLLECTION_KEYS.GAMES,
+    fields: [
+      'characters'
+    ]
+  },
+  [COLLECTION_KEYS.SESSIONS]: {
+    key: COLLECTION_KEYS.SESSIONS,
+    fields: [
+      'storytellers',
+      'party',
+      'players',
+    ]
+  },
   [COLLECTION_KEYS.MAPS]: {
     key: COLLECTION_KEYS.MAPS,
-    fields: {
-      characters: {
-        key: 'characters',
-        isCollection: true,
-        fields: {
-        }
-      }
-    }
+    fields: [],
   }
 };

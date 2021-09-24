@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from "react";
-import firebase from "firebase";
+import React from "react";
 import "antd/dist/antd.css";
 import "./App.scss";
 
-import { DataContext, FirestoreContext } from "./Contexts";
-import FB from "./firebaseApi";
+import { DataContext, FirebaseContext } from "./Contexts";
 import DataApi from "./dataApi/dataApi";
 import LoginForm from "./login/LoginForm";
 import { Dashboard } from "./Dashboard";
 import { useAuth } from "./hooks/useAuth";
 
 function App() {
-  const { firestore, user } = useAuth();
+  const { firestore, realtime, user } = useAuth();
 
   const dataApi = new DataApi();
 
   return (
-    <FirestoreContext.Provider value={{ fs: firestore }}>
+    <FirebaseContext.Provider value={{ fs: firestore, realtime }}>
       <DataContext.Provider value={{ dataApi }}>
         <div className="App">
           <header className="App-header">
@@ -26,7 +24,7 @@ function App() {
           {user && <Dashboard />}
         </div>
       </DataContext.Provider>
-    </FirestoreContext.Provider>
+    </FirebaseContext.Provider>
   );
 }
 
