@@ -25,11 +25,12 @@ export const initializeFirebase = () => {
     firebase.app();
   }
   const firestore = firebase.firestore();
-  // const database = firebase.database();
-  // database.goOnline();
+  const database = firebase.database();
+  database.goOnline();
 
-  return { firestore };
+  return { firestore, realtime: database };
 };
+
 
 export const signIn = async ({
   email,
