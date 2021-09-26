@@ -3,6 +3,7 @@ enum COLLECTION_KEYS {
   MAPS = 'maps',
   MINI_GAMES = 'minigames',
   SESSIONS = 'sessions',
+  VERSE_UPDATES = 'verseUpdates'
 };
 
 export const realtimeDbSchema = {
@@ -19,6 +20,10 @@ export const realtimeDbSchema = {
       'party',
       'players',
     ]
+  },
+  [COLLECTION_KEYS.VERSE_UPDATES]: {
+    key: COLLECTION_KEYS.VERSE_UPDATES,
+    fields: [],
   },
   [COLLECTION_KEYS.MAPS]: {
     key: COLLECTION_KEYS.MAPS,
