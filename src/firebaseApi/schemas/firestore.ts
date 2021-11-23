@@ -1,6 +1,7 @@
 enum COLLECTION_KEYS {
   ACCOUNTS = 'accounts',
-  CHARACTERS ='characters',
+  CHARACTERS = 'characters',
+  FLAGS = 'flags',
   PUBLISHED_VERSES = 'publishedVerses',
   VERSES = 'servers',
   GAMES = 'verses',
@@ -47,6 +48,10 @@ export const firestoreSchema = {
       'name',
       'version',
     ],
+  },
+  [COLLECTION_KEYS.FLAGS]: {
+    key: COLLECTION_KEYS.FLAGS,
+    fields: [],
   },
   [COLLECTION_KEYS.PUBLISHED_VERSES]: {
     key: COLLECTION_KEYS.PUBLISHED_VERSES,
