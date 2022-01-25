@@ -94,7 +94,6 @@ const GetCard = styled(({ ...props }) => {
             rules={[{ required: true, message: "Select a colection" }]}
           >
             <Select
-              // allowClear={true}
               showArrow={false}
               style={{ minWidth: "10rem" }}
               options={collectionOptions}

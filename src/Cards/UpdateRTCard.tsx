@@ -1,19 +1,22 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { Button, Card, Form, Input, Select, Tooltip, message } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
+import { SaveOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import firebase from "firebase";
 
-import { FirebaseContext } from "../Contexts";
+import { DataContext, FirebaseContext } from "../Contexts";
+import DataApi from "../dataApi/dataApi";
 import FB from "../firebaseApi";
+import CollectionDataBox from "../CollectionDataBox/CollectionDataBox";
 import { IDataQuery, ISelectOptions } from "../models/common";
 
 const collections = FB.realtimeDbSchema as any;
 
-export const DeleteRTGameCard = styled(({ ...props }): JSX.Element => {
+export const UpdateRTCard = styled(({ ...props }): JSX.Element => {
   const [form] = Form.useForm();
 
   const [dataQuery, setDataQuery] = useState<IDataQuery>({} as any);
+  const { dataApi } = useContext(DataContext) as { dataApi: DataApi };
   const { realtime } = useContext(FirebaseContext) as {
     realtime: firebase.database.Database;
   };
@@ -26,8 +29,27 @@ export const DeleteRTGameCard = styled(({ ...props }): JSX.Element => {
     []
   );
 
+  const subCollections = useMemo(
+    () => collections[dataQuery.collectionKey]?.collections,
+    [dataQuery.collectionKey]
+  );
+
+  const subCollectionOptions =
+    subCollections &&
+    Object.keys(subCollections).reduce(
+      (subOptions: ISelectOptions[], subCollectionKey: string) => {
+        const { key } = subCollections[subCollectionKey];
+        return [...subOptions, { label: key, value: key }];
+      },
+      []
+    );
+
   const clearValue = () => {
-    const updatedForm = { ...form.getFieldsValue(), collectionValue: "" };
+    const updatedForm = {
+      ...form.getFieldsValue(),
+      collectionValue: "",
+      subCollectionValue: "",
+    };
 
     form.setFieldsValue(updatedForm);
     setDataQuery(updatedForm);
@@ -36,21 +58,30 @@ export const DeleteRTGameCard = styled(({ ...props }): JSX.Element => {
   const setData = async () => {
     try {
       const values = await form.validateFields();
-      const { collectionKey, collectionValue } = values || {};
+      const {
+        collectionKey,
+        collectionValue,
+        subCollectionKey,
+        subCollectionValue,
+      } = values || {};
 
-      const valuesList = collectionValue
-        .split(",")
-        .map((id: string) => id.trim());
+      if (subCollectionKey && !subCollectionValue) return;
+
+      let updateRef = realtime.ref(`${collectionKey}/${collectionValue}`);
+      if (subCollectionKey && subCollectionValue) {
+        updateRef = updateRef.child(
+          `${subCollectionKey}/${subCollectionValue}`
+        );
+      }
+
+      const updateValue = dataApi.getSaveData();
 
       try {
-        const deletePromises = valuesList.map((id: string) =>
-          id ? realtime.ref(`${collectionKey}/${id}`).set(null) : null
-        );
+        if (!updateValue || !Object.keys(updateValue).length) return;
 
-        await Promise.all(deletePromises);
-        clearValue();
+        await updateRef.update(updateValue)
 
-        message.success("Deleted successfully!");
+        message.success("Updated successfully!");
       } catch (err) {
         message.error(err.message);
       }
@@ -106,21 +137,37 @@ export const DeleteRTGameCard = styled(({ ...props }): JSX.Element => {
               name="collectionValue"
               required={true}
               dependencies={["collectionKey"]}
-              rules={[{ required: true, message: "Enter an id" }]}
+              rules={[{ required: true, message: "Enter a field key" }]}
             >
-              <Input.TextArea
-                rows={3}
-                className="collection-key-value"
-                placeholder="Add a single value, or a list of values separated by comma"
+              <Input className="collection-key-value" />
+            </Form.Item>
+          )}
+
+          {subCollectionOptions && (
+            <Form.Item name="subCollectionKey" dependencies={["collectionKey"]}>
+              <Select
+                allowClear={true}
+                showArrow={false}
+                style={{ minWidth: "10rem" }}
+                options={subCollectionOptions}
               />
             </Form.Item>
           )}
 
+          {dataQuery?.subCollectionKey && (
+            <Form.Item
+              name="subCollectionValue"
+              dependencies={["collectionKey", "collectionValue"]}
+            >
+              <Input className="collection-key-value" placeholder="abcd-1010" />
+            </Form.Item>
+          )}
+
           <Form.Item>
-            <Tooltip title="delete">
+            <Tooltip title="update">
               <Button
                 type="default"
-                icon={<DeleteOutlined />}
+                icon={<SaveOutlined />}
                 onClick={setData}
                 disabled={
                   !dataQuery?.collectionKey && !dataQuery?.collectionValue
@@ -130,6 +177,8 @@ export const DeleteRTGameCard = styled(({ ...props }): JSX.Element => {
           </Form.Item>
         </Form>
       </div>
+
+      <CollectionDataBox editable={true} dataQuery={dataQuery} />
     </Card>
   );
 })`
@@ -139,4 +188,4 @@ export const DeleteRTGameCard = styled(({ ...props }): JSX.Element => {
   }
 `;
 
-export default DeleteRTGameCard;
+export default UpdateRTCard;

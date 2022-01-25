@@ -4,7 +4,8 @@ import { Card, Collapse } from "antd";
 
 import GetCard from "./Cards/GetCard";
 import UpdateCard from "./Cards/UpdateCard";
-import { DeleteRTGameCard } from "./Cards/DeleteRTGameCard";
+import { DeleteRTCard } from "./Cards/DeleteRTCard";
+import { UpdateRTCard } from "./Cards/UpdateRTCard";
 
 export const Dashboard = styled((props) => {
   return (
@@ -17,8 +18,11 @@ export const Dashboard = styled((props) => {
           <Collapse.Panel header="UPDATE" key="2">
             <UpdateCard />
           </Collapse.Panel>
-          <Collapse.Panel header="DELETE-RealTime" key="3">
-            <DeleteRTGameCard />
+          <Collapse.Panel header="UPDATE-RealTime" key="3">
+            <UpdateRTCard />
+          </Collapse.Panel>
+          <Collapse.Panel header="DELETE-RealTime" key="4">
+            <DeleteRTCard />
           </Collapse.Panel>
         </Collapse>
       </Card>
